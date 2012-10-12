@@ -26,7 +26,7 @@ class TestCamera(GaiaTestCase):
         url = self.marionette.get_url()
         self.assertTrue('camera' in url, 'wrong url: %s' % url)
 
-        self.wait_for_element_visible(*self._capture_photo_locator)
+        self.wait_for_element_displayed(*self._capture_photo_locator)
         self.marionette.find_element(*self._capture_photo_locator).click()
 
         self.wait_for_element_present(*self._film_strip_image_locator)
@@ -50,10 +50,10 @@ class TestCamera(GaiaTestCase):
         url = self.marionette.get_url()
         self.assertTrue('camera' in url, 'wrong url: %s' % url)
 
-        self.wait_for_element_visible(*self._capture_photo_locator)
-        self.wait_for_element_visible(*self._switch_source_button_locator)
+        self.wait_for_element_displayed(*self._capture_photo_locator)
+        self.marionette.find_element(*self._switch_source_button_locator).click()
 
-        self.wait_for_element_visible(*self._video_timer_locator)
+        self.wait_for_element_displayed(*self._video_timer_locator)
 
         self.marionette.find_element(*self._capture_photo_locator).click()
 
