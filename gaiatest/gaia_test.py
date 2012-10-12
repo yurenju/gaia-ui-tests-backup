@@ -118,6 +118,13 @@ class GaiaTestCase(MarionetteTestCase):
         else:
             raise Exception('Element %s still present after timeout' % locator)
 
+    def wait_for_condition(self, condition, timeout=10):
+        timeout = float(timeout) + time.time()
+
+        while time.time() < timeout and eval(condition) == False:
+            time.sleep(0.5)
+        else:
+            raise Exception('Condition did not resolve True after timeout')
 
     def tearDown(self):
         self.lockscreen = None
