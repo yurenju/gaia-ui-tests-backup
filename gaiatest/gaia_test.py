@@ -4,6 +4,7 @@
 
 from marionette import MarionetteTestCase
 from marionette.errors import NoSuchElementException
+from marionette.errors import ElementNotVisibleException
 import os
 import time
 
@@ -91,6 +92,19 @@ class GaiaTestCase(MarionetteTestCase):
         else:
             raise Exception('Element %s not found before timeout' % locator)
 
+    def wait_for_element_displayed(self, by, locator, timeout=10):
+        timeout = float(timeout) + time.time()
+
+        while time.time() < timeout:
+            time.sleep(0.5)
+            try:
+                self.marionette.find_element(by, locator).is_displayed()
+                break
+            except (ElementNotVisibleException, NoSuchElementException):
+                pass
+        else:
+            raise Exception('Element %s not visible before timeout' % locator)
+
 
     def wait_for_element_not_present(self, by, locator, timeout=10):
         timeout = float(timeout) + time.time()
@@ -102,7 +116,7 @@ class GaiaTestCase(MarionetteTestCase):
             except NoSuchElementException:
                 break
         else:
-            raise Exception('Element %s not found before timeout' % locator)
+            raise Exception('Element %s still present after timeout' % locator)
 
 
     def tearDown(self):
