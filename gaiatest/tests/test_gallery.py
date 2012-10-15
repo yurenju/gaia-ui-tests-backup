@@ -12,7 +12,7 @@ class TestGallery(GaiaTestCase):
     _current_photo = ('css selector', 'div.currentPhoto img[src]')
     _photos_toolbar_locator = ('id', 'photos-toolbar')
 
-    def test_gallery_navigation(self):
+    def test_gallery_view(self):
         # unlock the lockscreen if it's locked
         self.assertTrue(self.lockscreen.unlock())
 
@@ -33,6 +33,11 @@ class TestGallery(GaiaTestCase):
 
         self.wait_for_element_present(*self._current_photo)
         self.assertTrue(self.marionette.find_element(*self._current_photo).is_displayed())
+
+        # TODO
+        # Add steps to view picture full screen
+        # TODO
+        # Repeat test with landscape orientation
 
         # close the app
         self.apps.kill(app)

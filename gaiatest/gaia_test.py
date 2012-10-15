@@ -5,6 +5,7 @@
 from marionette import MarionetteTestCase
 from marionette.errors import NoSuchElementException
 from marionette.errors import ElementNotVisibleException
+from marionette.errors import TimeoutException
 import os
 import time
 
@@ -90,21 +91,7 @@ class GaiaTestCase(MarionetteTestCase):
             except NoSuchElementException:
                 pass
         else:
-            raise Exception('Element %s not found before timeout' % locator)
-
-    def wait_for_element_displayed(self, by, locator, timeout=10):
-        timeout = float(timeout) + time.time()
-
-        while time.time() < timeout:
-            time.sleep(0.5)
-            try:
-                self.marionette.find_element(by, locator).is_displayed()
-                break
-            except (ElementNotVisibleException, NoSuchElementException):
-                pass
-        else:
-            raise Exception('Element %s not visible before timeout' % locator)
-
+            raise TimeoutException('Element %s not found before timeout' % locator)
 
     def wait_for_element_not_present(self, by, locator, timeout=10):
         timeout = float(timeout) + time.time()
@@ -116,15 +103,50 @@ class GaiaTestCase(MarionetteTestCase):
             except NoSuchElementException:
                 break
         else:
-            raise Exception('Element %s still present after timeout' % locator)
+            raise TimeoutException('Element %s still present after timeout' % locator)
 
-    def wait_for_condition(self, condition, timeout=10):
+    def wait_for_element_displayed(self, by, locator, timeout=10):
         timeout = float(timeout) + time.time()
 
-        while time.time() < timeout and eval(condition) == False:
+        while time.time() < timeout:
             time.sleep(0.5)
+            try:
+                if self.marionette.find_element(by, locator).is_displayed():
+                    break
+            except NoSuchElementException:
+                pass
         else:
-            raise Exception('Condition did not resolve True after timeout')
+            raise TimeoutException('Element %s not visible before timeout' % locator)
+
+    def wait_for_element_not_displayed(self, by, locator, timeout=10):
+        timeout = float(timeout) + time.time()
+
+        while time.time() < timeout:
+            time.sleep(0.5)
+            try:
+                if not self.marionette.find_element(by, locator).is_displayed():
+                    break
+            except NoSuchElementException:
+                break
+        else:
+            raise TimeoutException('Element %s not visible before timeout' % locator)
+
+    def wait_for_condition(self, method, timeout=10):
+        """Calls the method provided with the driver as an argument until the \
+        return value is not False."""
+        end_time = time.time() + timeout
+        while time.time() < end_time:
+            try:
+                value = method(self.marionette)
+                if value:
+                    return value
+            except NoSuchElementException:
+                pass
+            time.sleep(0.5)
+            if(time.time() > end_time):
+                break
+        else:
+            raise TimeoutException(message)
 
     def tearDown(self):
         self.lockscreen = None

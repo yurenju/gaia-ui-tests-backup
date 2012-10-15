@@ -9,10 +9,10 @@ class TestCalculator(GaiaTestCase):
 
     _display_locator = ('id', 'display')
     _multiply_button_locator = ('id', 'multiply')
-    _clear_button_locator = ('xpath', "//input[@value='C")
-    _equals_button_locator = ('xpath', "//input[@value='=")
-    _three_button_locator = ('xpath', "//input[@value='3")
-    _five_button_locator = ('xpath', "//input[@value='5")
+    _clear_button_locator = ('xpath', "//input[@value='C']")
+    _equals_button_locator = ('xpath', "//input[@value='=']")
+    _three_button_locator = ('xpath', "//input[@value='3']")
+    _five_button_locator = ('xpath', "//input[@value='5']")
 
     def test_calculator_basic(self):
         # unlock the lockscreen if it's locked

@@ -4,6 +4,7 @@
 
 from gaiatest import GaiaTestCase
 import time
+import unittest
 
 class TestSms(GaiaTestCase):
 
@@ -18,14 +19,15 @@ class TestSms(GaiaTestCase):
     _message_sending_spinner_locator = ('css selector', "img[src='style/images/spinningwheel_small_animation.gif']")
     _received_message_content_locator = ('css selector', 'div.message-block span.received div.bubble')
 
+    # Include country/area code
+    _remote_phone_number = ""
 
+    @unittest.skipIf(_remote_phone_number is "", "Cannot complete test without a remote phone")
     def test_sms_send(self):
         '''
         This test depends upon an external/device emulator to return the text message
         '''
 
-        #include intl area code
-        _remote_phone_number = ""
         _text_message_content = "Automated Test %s" % str(time.time())
 
         # unlock the lockscreen if it's locked
@@ -48,7 +50,7 @@ class TestSms(GaiaTestCase):
         self.wait_for_element_present(*self._receiver_input_locator)
         # type phone number
         contact_field = self.marionette.find_element(*self._receiver_input_locator)
-        contact_field.send_keys(_remote_phone_number)
+        contact_field.send_keys(self._remote_phone_number)
 
         message_field = self.marionette.find_element(*self._message_field_locator)
         message_field.send_keys(_text_message_content)
