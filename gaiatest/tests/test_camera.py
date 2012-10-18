@@ -9,7 +9,7 @@ class TestCamera(GaiaTestCase):
 
     _capture_photo_locator = ('id', 'capture-button')
     _switch_source_button_locator = ('id', 'switch-button')
-    _film_strip_image_locator = ('css selector', 'div#film-strip > img')
+    _film_strip_image_locator = ('css selector', 'div#film-strip div.image > img')
     _video_timer_locator = ('id', 'video-timer')
 
     def test_capture_a_photo(self):

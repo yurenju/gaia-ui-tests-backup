@@ -7,13 +7,14 @@ from gaiatest import GaiaTestCase
 
 class TestContacts(GaiaTestCase):
 
-    def test_add_new_contact(self):
+    # TODO waiting for bug 800011
+    def incomplete_add_new_contact(self):
         # https://moztrap.mozilla.org/manage/case/1309/
 
         self.assertTrue(self.lockscreen.unlock())
 
         # launch the Contacts app
-        app = self.apps.launch('communications/contacts/')
+        app = self.apps.launch('communications')
         self.assertTrue(app.frame_id is not None)
 
         # switch into the Contact's frame

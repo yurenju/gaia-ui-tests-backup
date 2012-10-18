@@ -9,8 +9,6 @@ class TestMarketplace(GaiaTestCase):
 
     _login_button = ('css selector', 'p.proceed > a.button.browserid')
 
-
-
     # TODO incomplete - this test requires Bug 802227
     def incomplete_load_marketplace(self):
         # unlock the lockscreen if it's locked
@@ -30,7 +28,7 @@ class TestMarketplace(GaiaTestCase):
 
         self.marionette.find_element(*self._login_button).click()
 
-        time.sleep(10)
+        time.sleep(20)
 
         #TODO switch to Persona frame
 
