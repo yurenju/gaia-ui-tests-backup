@@ -16,6 +16,8 @@ class TestDialer(GaiaTestCase):
     _call_screen_locator = ('id', 'call-screen')
 
     # TODO incomplete requires bug 800011
+    @unittest.skipIf(self.test_vars['remote_phone_number']
+        is "", "Cannot complete test without a remote phone")
     def incomplete_dialer_make_call(self):
         # unlock the lockscreen if it's locked
         self.assertTrue(self.lockscreen.unlock())

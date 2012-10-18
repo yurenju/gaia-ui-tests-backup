@@ -33,6 +33,8 @@ class TestMarketplace(GaiaTestCase):
         #TODO switch to Persona frame
 
         #TODO complete Persona login
+        #self.test_vars['marketplace_username']
+        #self.test_vars['marketplace_password']
 
         #TODO verify that user is logged in
 
