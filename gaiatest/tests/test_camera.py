@@ -53,7 +53,7 @@ class TestCamera(GaiaTestCase):
         self.wait_for_element_displayed(*self._capture_photo_locator)
         self.marionette.find_element(*self._switch_source_button_locator).click()
 
-        self.wait_for_element_displayed(*self._video_timer_locator)
+       #self.wait_for_element_displayed(*self._video_timer_locator)
 
         self.marionette.find_element(*self._capture_photo_locator).click()
 
@@ -63,5 +63,10 @@ class TestCamera(GaiaTestCase):
         # Stop recording
         self.marionette.find_element(*self._capture_photo_locator).click()
 
+        self.wait_for_element_not_displayed(*self._video_timer_locator)
+
         # TODO
         # Validate the recorded video somehow
+
+        # close the app
+        self.apps.kill(app)
