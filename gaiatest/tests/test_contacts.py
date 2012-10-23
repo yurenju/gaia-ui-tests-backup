@@ -21,8 +21,7 @@ class TestContacts(GaiaTestCase):
 
     _done_button_locator = ('id', 'save-button')
 
-    # TODO waiting for bug 800011
-    def test_add_new_contact(self):
+    def aatest_add_new_contact(self):
         # https://moztrap.mozilla.org/manage/case/1309/
 
         self.assertTrue(self.lockscreen.unlock())
@@ -63,6 +62,31 @@ class TestContacts(GaiaTestCase):
 
         contact_locator = ('xpath',"//strong/b[text()='%s']" % contact['first_name'])
         self.wait_for_element_displayed(*contact_locator)
+
+        # close the app
+        self.apps.kill(app)
+
+
+    def test_call_contact(self):
+
+        contact = MockContact()
+        self.data.insert_contact(contact)
+
+        import time
+        time.sleep(5)
+
+        self.assertTrue(self.lockscreen.unlock())
+
+        # launch the Contacts app
+        app = self.apps.launch('Contacts')
+        self.assertTrue(app.frame_id is not None)
+
+        # switch into the Contact's frame
+        self.marionette.switch_to_frame(app.frame_id)
+        url = self.marionette.get_url()
+        self.assertTrue('communications' in url, 'wrong url: %s' % url)
+
+        time.sleep(10)
 
         # close the app
         self.apps.kill(app)

@@ -19,6 +19,7 @@ class LockScreen(object):
 let setlock = window.wrappedJSObject.SettingsListener.getSettingsLock();
 let obj = {'screen.timeout': 0};
 setlock.set(obj);
+
 waitFor(
     function() {
         window.wrappedJSObject.LockScreen.unlock();
@@ -70,6 +71,20 @@ class GaiaApps(object):
         self.marionette.execute_script("window.wrappedJSObject.WindowManager.kill('%s');"
                                         % app.origin)
 
+class GaiaData(object):
+
+    def __init__(self, marionette):
+        self.marionette = marionette
+        js = os.path.abspath(os.path.join(__file__, os.path.pardir, "gaia_data_layer.js"))
+        self.marionette.import_script(js)
+
+    def insert_contact(self, contact):
+        json = str(contact.json())
+        print json
+        #output = self.marionette.execute_script("window.navigator.mozContacts.save(%s);" % json)
+
+        output = self.marionette.execute_script("GaiaDataLayer.insertContact(%s)" % json)
+        print output
 
 class GaiaTestCase(MarionetteTestCase):
 
@@ -79,6 +94,7 @@ class GaiaTestCase(MarionetteTestCase):
         self.marionette.set_script_timeout(60000)
         self.lockscreen = LockScreen(self.marionette)
         self.apps = GaiaApps(self.marionette)
+        self.data = GaiaData(self.marionette)
 
     def wait_for_element_present(self, by, locator, timeout=10):
         timeout = float(timeout) + time.time()
@@ -151,4 +167,5 @@ class GaiaTestCase(MarionetteTestCase):
     def tearDown(self):
         self.lockscreen = None
         self.apps = None
+        self.data = None
         MarionetteTestCase.tearDown(self)

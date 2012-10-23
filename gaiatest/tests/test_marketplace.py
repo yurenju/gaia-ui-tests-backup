@@ -7,10 +7,10 @@ import time
 
 class TestMarketplace(GaiaTestCase):
 
-    _login_button = ('css selector', 'p.proceed > a.button.browserid')
+    _login_button = ('css selector', 'a.button.browserid')
 
     # TODO incomplete - this test requires Bug 802227
-    def incomplete_load_marketplace(self):
+    def test_load_marketplace(self):
         # unlock the lockscreen if it's locked
         self.assertTrue(self.lockscreen.unlock())
 
@@ -25,12 +25,18 @@ class TestMarketplace(GaiaTestCase):
 
         # TODO replace this with an appropriate wait
         time.sleep(10)
+        #print self.marionette.page_source
 
         self.marionette.find_element(*self._login_button).click()
 
-        time.sleep(20)
+        time.sleep(10)
+
+        print self.marionette.window_handles
+
+        print len(self.find_elements('tag name','iframe'))
 
         #TODO switch to Persona frame
+
 
         #TODO complete Persona login
         #self.test_vars['marketplace_username']
