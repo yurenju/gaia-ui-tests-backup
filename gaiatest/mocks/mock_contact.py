@@ -10,9 +10,9 @@ class MockContact(dict):
     def __init__(self, **kwargs):
         # set your default values
         import time
-        self['first_name'] = 'gaia_%s' % repr(time.time()).replace('.', '')
+        self['first_name'] = 'gaia%s' % repr(time.time()).replace('.', '')[:6]
         self['last_name'] = "test"
-        self['email'] = '%s@restmail.net' % self['name']
+        self['email'] = '%s@restmail.net' % self['first_name']
         self['phone_no'] = "07011111111"
         self['street'] = "101 Testing street"
         self['zip'] = "90210"

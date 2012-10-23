@@ -17,7 +17,7 @@ Installation is simple:
 If you anticipate modifying gaiatest, you can instead:
 
     git clone git://github.com/mozilla-b2g/gaia.git
-    cd gaia/tests/marionette
+    cd gaia/tests/python
     python setup.py develop
 
 Running Tests
@@ -32,15 +32,16 @@ Options:
 
     --emulator arm --homedir /path/to/emulator:  use these options to 
         let Marionette launch an emulator for you in which to run a test
-    --address localhost:2828:  use this option to run a test on an emulator
+    --address <host>:<port>  use this option to run a test on an emulator
         which you've manually launched yourself, a real device, or a b2g
-        desktop build
+        desktop build.  If you've used port forwarding as described below,
+        you'd specify --address localhost:2828
 
 If you use the --address localhost:2828 option, you must additionally setup
 port forwarding from the device to your local machine.  You can do this by
 running the command:
 
-    adb forwad tcp:2828 tcp:2828
+    adb forward tcp:2828 tcp:2828
 
 adb is the 'android debug bridge', and is available in emulator packages under
 out/host/linux_x86/bin.  Alternatively, it may be downloaded as part of the
@@ -52,5 +53,5 @@ Writing Tests
 Test writing for Marionette Python tests is described at
 https://developer.mozilla.org/en-US/docs/Marionette/Marionette_Python_Tests.
 Additionally, gaiatest exposes some API's for managing Gaia's lockscreen
-and application launcher.  See https://github.com/mozilla-b2g/gaia/blob/master/tests/marionette/gaiatest/gaia_test.py.
+and application manager.  See https://github.com/mozilla-b2g/gaia/blob/master/tests/python/gaiatest/gaia_test.py.
 
