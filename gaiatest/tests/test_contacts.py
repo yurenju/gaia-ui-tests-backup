@@ -4,6 +4,7 @@
 
 from gaiatest import GaiaTestCase
 from gaiatest.mocks.mock_contact import MockContact
+import time
 
 class TestContacts(GaiaTestCase):
 
@@ -21,21 +22,25 @@ class TestContacts(GaiaTestCase):
 
     _done_button_locator = ('id', 'save-button')
 
-    def aatest_add_new_contact(self):
-        # https://moztrap.mozilla.org/manage/case/1309/
+    def setUp(self):
+        GaiaTestCase.setUp(self)
 
         self.assertTrue(self.lockscreen.unlock())
 
-        contact = MockContact()
+        self.contact = MockContact()
 
         # launch the Contacts app
-        app = self.apps.launch('Contacts')
-        self.assertTrue(app.frame_id is not None)
+        self.app = self.apps.launch('Contacts')
+        self.assertTrue(self.app.frame_id is not None)
 
         # switch into the Contact's frame
-        self.marionette.switch_to_frame(app.frame_id)
+        self.marionette.switch_to_frame(self.app.frame_id)
         url = self.marionette.get_url()
         self.assertTrue('communications' in url, 'wrong url: %s' % url)
+
+
+    def test_add_new_contact(self):
+        # https://moztrap.mozilla.org/manage/case/1309/
 
         self.wait_for_element_displayed(*self._add_new_contact_button_locator)
 
@@ -44,49 +49,35 @@ class TestContacts(GaiaTestCase):
         self.wait_for_element_displayed(*self._given_name_field_locator)
 
         # Enter data into fields
-        self.marionette.find_element(*self._given_name_field_locator).send_keys(contact['first_name'])
-        self.marionette.find_element(*self._family_name_field_locator).send_keys(contact['last_name'])
+        self.marionette.find_element(*self._given_name_field_locator).send_keys(self.contact['givenName'])
+        self.marionette.find_element(*self._family_name_field_locator).send_keys(self.contact['familyName'])
 
-        self.marionette.find_element(*self._phone_field_locator).send_keys(contact['phone_no'])
-        self.marionette.find_element(*self._email_field_locator).send_keys(contact['email'])
+        self.marionette.find_element(*self._phone_field_locator).send_keys(self.contact['tel'])
+        self.marionette.find_element(*self._email_field_locator).send_keys(self.contact['email'])
 
-        self.marionette.find_element(*self._street_field_locator).send_keys(contact['street'])
-        self.marionette.find_element(*self._zip_code_field_locator).send_keys(contact['zip'])
-        self.marionette.find_element(*self._city_field_locator).send_keys(contact['city'])
-        self.marionette.find_element(*self._country_field_locator).send_keys(contact['country'])
+        self.marionette.find_element(*self._street_field_locator).send_keys(self.contact['street'])
+        self.marionette.find_element(*self._zip_code_field_locator).send_keys(self.contact['zip'])
+        self.marionette.find_element(*self._city_field_locator).send_keys(self.contact['city'])
+        self.marionette.find_element(*self._country_field_locator).send_keys(self.contact['country'])
 
-        self.marionette.find_element(*self._comment_field_locator).send_keys(contact['comment'])
+        self.marionette.find_element(*self._comment_field_locator).send_keys(self.contact['comment'])
 
         done_button = self.marionette.find_element(*self._done_button_locator)
         done_button.click()
 
-        contact_locator = ('xpath',"//strong/b[text()='%s']" % contact['first_name'])
+        contact_locator = ('xpath',"//strong/b[text()='%s']" % self.contact['givenName'])
         self.wait_for_element_displayed(*contact_locator)
 
-        # close the app
-        self.apps.kill(app)
 
-
-    def test_call_contact(self):
+    def test_call_from_contact(self):
 
         contact = MockContact()
         self.data.insert_contact(contact)
 
-        import time
-        time.sleep(5)
-
-        self.assertTrue(self.lockscreen.unlock())
-
-        # launch the Contacts app
-        app = self.apps.launch('Contacts')
-        self.assertTrue(app.frame_id is not None)
-
-        # switch into the Contact's frame
-        self.marionette.switch_to_frame(app.frame_id)
-        url = self.marionette.get_url()
-        self.assertTrue('communications' in url, 'wrong url: %s' % url)
-
         time.sleep(10)
 
+
+    def tearDown(self):
         # close the app
-        self.apps.kill(app)
+        self.apps.kill(self.app)
+        GaiaTestCase.tearDown(self)

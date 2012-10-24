@@ -79,7 +79,7 @@ class GaiaData(object):
         self.marionette.import_script(js)
 
     def insert_contact(self, contact):
-        json = str(contact.json())
+        json = contact.json()
         print json
         #output = self.marionette.execute_script("window.navigator.mozContacts.save(%s);" % json)
 

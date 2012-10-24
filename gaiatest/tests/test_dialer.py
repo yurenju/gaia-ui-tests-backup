@@ -3,27 +3,24 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from gaiatest import GaiaTestCase
+import unittest
 import time
 
 class TestDialer(GaiaTestCase):
 
-    _remote_phone = ""
-
     _keyboard_container_locator = ('id', 'keyboard-container')
-    _phone_number_view_locator = ('id', 'phone-number-view')
+    _phone_number_view_locator = ('id', 'fake-phone-number-view')
     _call_bar_locator = ('id', 'keypad-callbar-call-action')
     _hangup_bar_locator = ('id', 'callbar-hang-up-action')
-    _call_screen_locator = ('id', 'call-screen')
+    _call_screen_locator = ('css selector', "iframe[name='call_screen']")
 
-    # TODO incomplete requires bug 800011
-    @unittest.skipIf(self.test_vars['remote_phone_number']
-        is "", "Cannot complete test without a remote phone")
-    def incomplete_dialer_make_call(self):
+    def test_dialer_make_call(self):
+
         # unlock the lockscreen if it's locked
         self.assertTrue(self.lockscreen.unlock())
 
         # launch the app
-        app = self.apps.launch('Dialer')
+        app = self.apps.launch('Phone')
         self.assertTrue(app.frame_id is not None)
 
         # switch into the app's frame
@@ -33,19 +30,24 @@ class TestDialer(GaiaTestCase):
 
         self.wait_for_element_displayed(*self._keyboard_container_locator)
 
-        self.dial_number(self._remote_phone)
+        self.dial_number(self.testvars['remote_phone_number'])
 
         # Assert that the number was entered correctly.
-        phone_view = self.marionette.find_element(*self._phone_number_view_locator).text
-        self.assertTrue(phone_view.text, self._remote_phone)
+        phone_view = self.marionette.find_element(*self._phone_number_view_locator)
+        #self.assertEqual(phone_view.text, self.testvars['remote_phone_number'])
 
         # Now press call
         self.marionette.find_element(*self._call_bar_locator).click()
 
-        # TODO Need to work out here how to get and switch to new window
+        self.marionette.switch_to_frame()
 
         # Wait for call screen
-        self.wait_for_element_displayed(*self._call_screen_locator)
+        self.wait_for_element_present(*self._call_screen_locator)
+        call_screen = self.marionette.find_element(*self._call_screen_locator)
+
+        self.marionette.switch_to_frame(call_screen)
+
+        print self.marionette.page_source
 
         # TODO assert that it is ringing
 
@@ -63,6 +65,7 @@ class TestDialer(GaiaTestCase):
 
         # TODO Doesn't work for + yet, requires click/hold gestures
         for i in phone_number:
-            if i == "+": continue
-            self.marionette.find_element('css selector', 'div.keypad-key div[data-value="%s"]' % i).click()
-            time.sleep(0.5)
+            # ignore non-numeric part of phone number until we have gestures
+            if int(i) in range(0,10):
+                self.marionette.find_element('css selector', 'div.keypad-key div[data-value="%s"]' % i).click()
+                time.sleep(0.25)

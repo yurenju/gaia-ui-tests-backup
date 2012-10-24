@@ -11,16 +11,16 @@ class MockContact(dict):
     def __init__(self, **kwargs):
         # set your default values
         import time
-        self['givenName'] = 'gaia%s' % repr(time.time()).replace('.', '')[8:]
+        self['givenName'] = 'gaia%s' % repr(time.time()).replace('.', '')[10:]
         self['familyName'] = "test"
         self['name'] = self['givenName'] + " " + self['familyName']
-#        self['email'] = '%s@restmail.net' % self['givenName']
+        self['email'] = '%s@restmail.net' % self['givenName']
         self['tel'] = "07011111111"
-#        self['street'] = "101 Testing street"
-#        self['zip'] = "90210"
-#        self['city'] = "London"
-#        self['country'] = "UK"
-#        self['comment'] = "Gaia automated test"
+        self['street'] = "101 Testing street"
+        self['zip'] = "90210"
+        self['city'] = "London"
+        self['country'] = "UK"
+        self['comment'] = "Gaia automated test"
 
         # update with any keyword arguments passed
         self.update(**kwargs)
