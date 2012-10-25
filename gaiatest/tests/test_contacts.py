@@ -69,15 +69,9 @@ class TestContacts(GaiaTestCase):
         self.wait_for_element_displayed(*contact_locator)
 
 
-    def test_call_from_contact(self):
-
-        contact = MockContact()
-        self.data.insert_contact(contact)
-
-        time.sleep(10)
-
-
     def tearDown(self):
+
         # close the app
-        self.apps.kill(self.app)
-        GaiaTestCase.tearDown(self)
+        if hasattr(self, 'app'):
+            self.apps.kill(self.app)
+            GaiaTestCase.tearDown(self)

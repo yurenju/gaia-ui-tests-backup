@@ -32,7 +32,7 @@ class TestBrowser(GaiaTestCase):
     def test_browser_basic(self):
 
         # This is returning True even though I cannot see it
-        print self.marionette.find_element(*self._throbber_locator).is_displayed()
+        self.wait_for_element_not_displayed(*self._throbber_locator)
 
         awesome_bar = self.marionette.find_element(*self._awesome_bar_locator)
         awesome_bar.click()

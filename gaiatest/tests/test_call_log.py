@@ -10,14 +10,13 @@ class TestCallLog(GaiaTestCase):
 
     _keyboard_container_locator = ('id', 'keyboard-container')
 
-    _missed_call_toolbar_button_locator = ('id', 'option-recents')
+    _recent_calls_toolbar_button_locator = ('id', 'option-recents')
 
     _all_call_log_tab_locator = ('id', 'allFilter')
     _missed_call_log_tab_locator = ('id', 'missedFilter')
 
     _all_calls_list_item = ('css selector', 'li.log-item')
-    #_missed_call_list_item = ('xpath', "//li[@class='log-item'][contains(@data-type, 'incoming')]")
-    _missed_call_list_item = ('css selector', "li[data-type='incoming-refused']")
+    _missed_call_list_item = ('css selector', "li.log-item[data-type='incoming-refused']")
 
     def setUp(self):
         GaiaTestCase.setUp(self)
@@ -42,7 +41,8 @@ class TestCallLog(GaiaTestCase):
 
         self.wait_for_element_displayed(*self._keyboard_container_locator)
 
-        self.marionette.find_element(*self._all_call_log_tab_locator).click()
+        self.marionette.find_element(*self._recent_calls_toolbar_button_locator).click()
+
         self.wait_for_element_displayed(*self._all_call_log_tab_locator)
 
         _all_calls_tab = self.marionette.find_element(*self._all_call_log_tab_locator)
@@ -64,7 +64,7 @@ class TestCallLog(GaiaTestCase):
 
         self.wait_for_element_displayed(*self._keyboard_container_locator)
 
-        self.marionette.find_element(*self._missed_call_toolbar_button_locator).click()
+        self.marionette.find_element(*self._recent_calls_toolbar_button_locator).click()
         self.wait_for_element_displayed(*self._missed_call_log_tab_locator)
 
         missed_calls_tab = self.marionette.find_element(*self._missed_call_log_tab_locator)

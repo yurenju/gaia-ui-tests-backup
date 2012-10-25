@@ -11,22 +11,24 @@ class TestMarketplace(GaiaTestCase):
 
     _persona_frame = ('css selector',"iframe[name='__persona_dialog']")
 
-    # TODO incomplete - this test requires Bug 802227
-    def test_load_marketplace(self):
+    def setUp(self):
+        GaiaTestCase.setUp(self)
+
         # unlock the lockscreen if it's locked
         self.assertTrue(self.lockscreen.unlock())
 
         # launch the app
-        app = self.apps.launch('Marketplace')
-        self.assertTrue(app.frame_id is not None)
-
-        print app.frame_id
-        print self.marionette.window_handles
+        self.app = self.apps.launch('Marketplace')
+        self.assertTrue(self.app.frame_id is not None)
 
         # switch into the app's frame
-        self.marionette.switch_to_frame(app.frame_id)
+        self.marionette.switch_to_frame(self.app.frame_id)
         url = self.marionette.get_url()
         self.assertTrue('marketplace' in url, 'wrong url: %s' % url)
+
+
+    # TODO incomplete - this test requires Bug 802227
+    def blocked_load_marketplace(self):
 
         # TODO replace this with an appropriate wait
         time.sleep(10)
@@ -39,7 +41,7 @@ class TestMarketplace(GaiaTestCase):
 
         #switch to persona frame
 
-        self.marionette.wait_for_element_present(*self._persona_frame)
+        self.marionette.wait_for_element_displayed(*self._persona_frame)
         persona_frame = self.marionette.find_element(*self._persona_frame)
         self.marionette.switch_to_frame(persona_frame)
 
@@ -52,5 +54,11 @@ class TestMarketplace(GaiaTestCase):
 
         #TODO verify that user is logged in
 
+
+    def tearDown(self):
+
         # close the app
-        self.apps.kill(app)
+        if self.app:
+            self.apps.kill(self.app)
+
+        GaiaTestCase.tearDown(self)

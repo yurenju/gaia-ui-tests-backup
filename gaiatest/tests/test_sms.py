@@ -18,26 +18,31 @@ class TestSms(GaiaTestCase):
     _message_sending_spinner_locator = ('css selector', "img[src='style/images/spinningwheel_small_animation.gif']")
     _received_message_content_locator = ('css selector', 'div.message-block span.received div.bubble')
 
-
-    def test_sms_send(self):
-        '''
-        This test depends upon an external/device emulator to return the text message
-        '''
-
-        _text_message_content = "Automated Test %s" % str(time.time())
+    def setUp(self):
+        GaiaTestCase.setUp(self)
 
         # unlock the lockscreen if it's locked
         self.assertTrue(self.lockscreen.unlock())
 
         # launch the app
-        app = self.apps.launch('Messages')
-        self.assertTrue(app.frame_id is not None)
+        self.app = self.apps.launch('Messages')
+        self.assertTrue(self.app.frame_id is not None)
 
         # switch into the frame
-        self.marionette.switch_to_frame(app.frame_id)
+        self.marionette.switch_to_frame(self.app.frame_id)
         url = self.marionette.get_url()
         self.assertTrue('gaiamobile' in url, 'wrong url: %s' % url)
-        #time.sleep(3)
+
+
+    def test_sms_send(self):
+        '''
+        This test depends upon an external/device emulator to return the text message
+        For this I use an Android phone with Tasker installed that automatically responds
+        to the FirefoxOS text message with "Reply + msg_content"
+        '''
+
+        _text_message_content = "Automated Test %s" % str(time.time())
+
         self.wait_for_element_displayed(*self._summary_header_locator)
 
         # click new message
@@ -66,18 +71,22 @@ class TestSms(GaiaTestCase):
             "//a[@class='unread']/div[text()='%s']" % _text_message_content)
 
         # now wait for the return message to arrive.
-        self.wait_for_element_present(*_new_message_locator, timeout=120)
+        self.wait_for_element_present(*_new_message_locator, timeout=180)
 
         # go into the new message
         self.marionette.find_element(*_new_message_locator).click()
         self.wait_for_element_displayed(*self._message_list_locator)
 
-        #print self.marionette.page_source
-
         # verify the received text message
         _received_message_text = self.marionette.find_element(*self._received_message_content_locator).text
 
-        self.assertIn("Reply" + _text_message_content, _received_message_text)
+        self.assertIn("Reply\\n" + _text_message_content, _received_message_text)
+
+
+    def tearDown(self):
 
         # close the app
-        self.apps.kill(app)
+        if self.app:
+            self.apps.kill(self.app)
+
+        GaiaTestCase.tearDown(self)

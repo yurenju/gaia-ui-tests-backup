@@ -12,18 +12,23 @@ class TestGallery(GaiaTestCase):
     _current_photo = ('css selector', 'div.currentPhoto img[src]')
     _photos_toolbar_locator = ('id', 'photos-toolbar')
 
-    def test_gallery_view(self):
+    def setUp(self):
+        GaiaTestCase.setUp(self)
+
         # unlock the lockscreen if it's locked
         self.assertTrue(self.lockscreen.unlock())
 
         # launch the Gallery app
-        app = self.apps.launch('Gallery')
-        self.assertTrue(app.frame_id is not None)
+        self.app = self.apps.launch('Gallery')
+        self.assertTrue(self.app.frame_id is not None)
 
         # switch into the Gallery's frame
-        self.marionette.switch_to_frame(app.frame_id)
+        self.marionette.switch_to_frame(self.app.frame_id)
         url = self.marionette.get_url()
         self.assertTrue('gallery' in url, 'wrong url: %s' % url)
+
+
+    def test_gallery_view(self):
 
         time.sleep(5)
         # throbber is throbbing forever
@@ -39,5 +44,11 @@ class TestGallery(GaiaTestCase):
         # TODO
         # Repeat test with landscape orientation
 
+
+    def tearDown(self):
+
         # close the app
-        self.apps.kill(app)
+        if self.app:
+            self.apps.kill(self.app)
+
+        GaiaTestCase.tearDown(self)

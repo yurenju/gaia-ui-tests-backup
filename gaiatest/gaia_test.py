@@ -102,8 +102,7 @@ class GaiaTestCase(MarionetteTestCase):
         while time.time() < timeout:
             time.sleep(0.5)
             try:
-                self.marionette.find_element(by, locator)
-                break
+                return self.marionette.find_element(by, locator)
             except NoSuchElementException:
                 pass
         else:
@@ -145,7 +144,7 @@ class GaiaTestCase(MarionetteTestCase):
             except NoSuchElementException:
                 break
         else:
-            raise TimeoutException('Element %s not visible before timeout' % locator)
+            raise TimeoutException('Element %s still visible after timeout' % locator)
 
     def wait_for_condition(self, method, timeout=10):
         """Calls the method provided with the driver as an argument until the \
