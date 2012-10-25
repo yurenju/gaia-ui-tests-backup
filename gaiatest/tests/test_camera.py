@@ -12,19 +12,23 @@ class TestCamera(GaiaTestCase):
     _film_strip_image_locator = ('css selector', 'div#film-strip div.image > img')
     _video_timer_locator = ('id', 'video-timer')
 
-    def test_capture_a_photo(self):
-        # https://moztrap.mozilla.org/manage/case/1309/
+    def setUp(self):
+        GaiaTestCase.setUp(self)
 
         self.assertTrue(self.lockscreen.unlock())
 
         # launch the Camera app
-        app = self.apps.launch('camera')
-        self.assertTrue(app.frame_id is not None)
+        self.app = self.apps.launch('camera')
+        self.assertTrue(self.app.frame_id is not None)
 
         # switch into the Camera's frame
-        self.marionette.switch_to_frame(app.frame_id)
+        self.marionette.switch_to_frame(self.app.frame_id)
         url = self.marionette.get_url()
         self.assertTrue('camera' in url, 'wrong url: %s' % url)
+
+
+    def test_capture_a_photo(self):
+        # https://moztrap.mozilla.org/manage/case/1309/
 
         self.wait_for_element_displayed(*self._capture_photo_locator)
         self.marionette.find_element(*self._capture_photo_locator).click()
@@ -34,21 +38,8 @@ class TestCamera(GaiaTestCase):
         # Find the new picture in the film strip
         self.assertTrue(self.marionette.find_element(*self._film_strip_image_locator).is_displayed())
 
-        # close the app
-        self.apps.kill(app)
 
     def test_capture_a_video(self):
-
-        self.assertTrue(self.lockscreen.unlock())
-
-        # launch the Camera app
-        app = self.apps.launch('camera')
-        self.assertTrue(app.frame_id is not None)
-
-        # switch into the Camera's frame
-        self.marionette.switch_to_frame(app.frame_id)
-        url = self.marionette.get_url()
-        self.assertTrue('camera' in url, 'wrong url: %s' % url)
 
         self.wait_for_element_displayed(*self._capture_photo_locator)
         self.marionette.find_element(*self._switch_source_button_locator).click()
@@ -68,5 +59,11 @@ class TestCamera(GaiaTestCase):
         # TODO
         # Validate the recorded video somehow
 
+
+    def tearDown(self):
+
         # close the app
-        self.apps.kill(app)
+        if hasattr(self, 'app'):
+            self.apps.kill(self.app)
+
+        GaiaTestCase.tearDown(self)

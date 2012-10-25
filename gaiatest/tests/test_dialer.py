@@ -3,7 +3,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from gaiatest import GaiaTestCase
-import unittest
 import time
 
 class TestDialer(GaiaTestCase):
@@ -14,27 +13,34 @@ class TestDialer(GaiaTestCase):
     _hangup_bar_locator = ('id', 'callbar-hang-up-action')
     _call_screen_locator = ('css selector', "iframe[name='call_screen']")
 
-    def test_dialer_make_call(self):
+    def setUp(self):
+
+        GaiaTestCase.setUp(self)
 
         # unlock the lockscreen if it's locked
         self.assertTrue(self.lockscreen.unlock())
 
         # launch the app
-        app = self.apps.launch('Phone')
-        self.assertTrue(app.frame_id is not None)
+        self.app = self.apps.launch('Phone')
+        self.assertTrue(self.app.frame_id is not None)
 
         # switch into the app's frame
-        self.marionette.switch_to_frame(app.frame_id)
+        self.marionette.switch_to_frame(self.app.frame_id)
         url = self.marionette.get_url()
         self.assertTrue('dialer' in url, 'wrong url: %s' % url)
 
+
+    def test_dialer_make_call(self):
+
         self.wait_for_element_displayed(*self._keyboard_container_locator)
 
-        self.dial_number(self.testvars['remote_phone_number'])
+        self._dial_number(self.testvars['remote_phone_number'])
 
         # Assert that the number was entered correctly.
         phone_view = self.marionette.find_element(*self._phone_number_view_locator)
-        #self.assertEqual(phone_view.text, self.testvars['remote_phone_number'])
+        print phone_view
+        # TODO text of this element does not work
+        self.assertEqual(phone_view.text, self.testvars['remote_phone_number'])
 
         # Now press call
         self.marionette.find_element(*self._call_bar_locator).click()
@@ -45,20 +51,25 @@ class TestDialer(GaiaTestCase):
         self.wait_for_element_present(*self._call_screen_locator)
         call_screen = self.marionette.find_element(*self._call_screen_locator)
 
+        # TODO this does not work yet
         self.marionette.switch_to_frame(call_screen)
 
-        print self.marionette.page_source
-
         # TODO assert that it is ringing
+
 
         # hang up
         self.marionette.find_element(*self._hangup_bar_locator).click()
 
+    def tearDown(self):
+
         # close the app
-        self.apps.kill(app)
+        if hasattr(self, 'app'):
+            self.apps.kill(self.app)
+
+        GaiaTestCase.tearDown(self)
 
 
-    def dial_number(self, phone_number):
+    def _dial_number(self, phone_number):
         '''
         Dial a number using the keypad
         '''

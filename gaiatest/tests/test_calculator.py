@@ -14,18 +14,22 @@ class TestCalculator(GaiaTestCase):
     _three_button_locator = ('xpath', "//input[@value='3']")
     _five_button_locator = ('xpath', "//input[@value='5']")
 
-    def test_calculator_basic(self):
+    def setUp(self):
+        GaiaTestCase.setUp(self)
+
         # unlock the lockscreen if it's locked
         self.assertTrue(self.lockscreen.unlock())
 
         # launch the Calculator app
-        app = self.apps.launch('Calculator')
-        self.assertTrue(app.frame_id is not None)
+        self.app = self.apps.launch('Calculator')
+        self.assertTrue(self.app.frame_id is not None)
 
         # switch into the Calculator's frame
-        self.marionette.switch_to_frame(app.frame_id)
+        self.marionette.switch_to_frame(self.app.frame_id)
         url = self.marionette.get_url()
         self.assertTrue('calculator' in url, 'wrong url: %s' % url)
+
+    def test_calculator_basic(self):
 
         # clear the calculator's display
         self.marionette.find_element(*self._clear_button_locator).click()
@@ -40,5 +44,11 @@ class TestCalculator(GaiaTestCase):
         display = self.marionette.find_element(*self._display_locator)
         self.assertEquals(display.text, '15', 'wrong calculated value!')
 
+
+    def tearDown(self):
+
         # close the app
-        self.apps.kill(app)
+        if hasattr(self, 'app'):
+            self.apps.kill(self.app)
+
+        GaiaTestCase.tearDown(self)

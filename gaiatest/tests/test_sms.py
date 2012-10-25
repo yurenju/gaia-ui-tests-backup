@@ -4,7 +4,6 @@
 
 from gaiatest import GaiaTestCase
 import time
-import unittest
 
 class TestSms(GaiaTestCase):
 
@@ -20,10 +19,6 @@ class TestSms(GaiaTestCase):
     _received_message_content_locator = ('css selector', 'div.message-block span.received div.bubble')
 
 
-    _remote_phone_number = ""
-
-    #@unittest.skipIf(self.testvars['remote_phone_number']
-    #    is "", "Cannot complete test without a remote phone")
     def test_sms_send(self):
         '''
         This test depends upon an external/device emulator to return the text message

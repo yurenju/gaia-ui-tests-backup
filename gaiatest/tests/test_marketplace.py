@@ -9,6 +9,8 @@ class TestMarketplace(GaiaTestCase):
 
     _login_button = ('css selector', 'a.button.browserid')
 
+    _persona_frame = ('css selector',"iframe[name='__persona_dialog']")
+
     # TODO incomplete - this test requires Bug 802227
     def test_load_marketplace(self):
         # unlock the lockscreen if it's locked
@@ -17,6 +19,9 @@ class TestMarketplace(GaiaTestCase):
         # launch the app
         app = self.apps.launch('Marketplace')
         self.assertTrue(app.frame_id is not None)
+
+        print app.frame_id
+        print self.marionette.window_handles
 
         # switch into the app's frame
         self.marionette.switch_to_frame(app.frame_id)
@@ -29,18 +34,21 @@ class TestMarketplace(GaiaTestCase):
 
         self.marionette.find_element(*self._login_button).click()
 
-        time.sleep(10)
+        # switch to top level frame
+        self.marionette.switch_to_frame()
 
-        print self.marionette.window_handles
+        #switch to persona frame
 
-        print len(self.find_elements('tag name','iframe'))
+        self.marionette.wait_for_element_present(*self._persona_frame)
+        persona_frame = self.marionette.find_element(*self._persona_frame)
+        self.marionette.switch_to_frame(persona_frame)
 
         #TODO switch to Persona frame
 
 
         #TODO complete Persona login
-        #self.test_vars['marketplace_username']
-        #self.test_vars['marketplace_password']
+        #self.testvars['marketplace_username']
+        #self.testvars['marketplace_password']
 
         #TODO verify that user is logged in
 

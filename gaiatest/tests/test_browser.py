@@ -12,19 +12,24 @@ class TestBrowser(GaiaTestCase):
     _throbber_locator = ("id", "throbber")
     _browser_frame_locator = ('css selector', 'iframe[mozbrowser]')
 
-    #TODO finish this test
-    def incomplete_browser_basic(self):
+
+    def setUp(self):
+        GaiaTestCase.setUp(self)
+
         # unlock the lockscreen if it's locked
         self.assertTrue(self.lockscreen.unlock())
 
         # launch the app
-        app = self.apps.launch('Browser')
-        self.assertTrue(app.frame_id is not None)
+        self.app = self.apps.launch('Browser')
+        self.assertTrue(self.app.frame_id is not None)
 
         # switch into the app's frame
-        self.marionette.switch_to_frame(app.frame_id)
+        self.marionette.switch_to_frame(self.app.frame_id)
         url = self.marionette.get_url()
         self.assertTrue('browser' in url, 'wrong url: %s' % url)
+
+
+    def test_browser_basic(self):
 
         # This is returning True even though I cannot see it
         print self.marionette.find_element(*self._throbber_locator).is_displayed()
@@ -33,19 +38,27 @@ class TestBrowser(GaiaTestCase):
         awesome_bar.click()
         awesome_bar.send_keys("www.mozilla.com")
 
-        awesome_bar = self.marionette.find_element(*self._awesome_bar_locator)
-        awesome_bar.click()
-        awesome_bar.send_keys("www.mozilla.com")
-
         self.marionette.find_element(*self._url_button_locator).click()
 
-        # This does not work
+        time.sleep(5)
+        #print self.marionette.page_source
+
+        # TODO This does not work
         browser_frame = self.marionette.find_element(*self._browser_frame_locator)
+        print browser_frame
+        #print browser_frame.size
+
         self.marionette.switch_to_frame(browser_frame)
 
         # TODO
         # Assert that the page has loaded correctly
         # Assert the error page is not shown
 
+
+    def tearDown(self):
+
         # close the app
-        self.apps.kill(app)
+        if hasattr(self, 'app'):
+            self.apps.kill(self.app)
+
+        GaiaTestCase.tearDown(self)
