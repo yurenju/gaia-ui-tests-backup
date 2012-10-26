@@ -8,7 +8,7 @@ import time
 class TestDialer(GaiaTestCase):
 
     _keyboard_container_locator = ('id', 'keyboard-container')
-    _phone_number_view_locator = ('id', 'fake-phone-number-view')
+    _phone_number_view_locator = ('id', 'phone-number-view')
     _call_bar_locator = ('id', 'keypad-callbar-call-action')
     _hangup_bar_locator = ('id', 'callbar-hang-up-action')
     _call_screen_locator = ('css selector', "iframe[name='call_screen']")
@@ -40,9 +40,9 @@ class TestDialer(GaiaTestCase):
         phone_view = self.marionette.find_element(*self._phone_number_view_locator)
 
         # TODO text of this element does not work
-        #self.assertEqual(phone_view.text, self.testvars['remote_phone_number'])
+        self.assertEqual(phone_view.get_attribute('value'), self.testvars['remote_phone_number'])
 
-        # Now press call
+        # Now press call!
         #self.marionette.find_element(*self._call_bar_locator).click()
 
         #self.marionette.switch_to_frame()

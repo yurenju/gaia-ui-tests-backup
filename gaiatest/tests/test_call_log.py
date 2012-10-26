@@ -4,11 +4,8 @@
 
 from gaiatest import GaiaTestCase
 import unittest
-import time
 
 class TestCallLog(GaiaTestCase):
-
-    _keyboard_container_locator = ('id', 'keyboard-container')
 
     _recent_calls_toolbar_button_locator = ('id', 'option-recents')
 
@@ -39,17 +36,17 @@ class TestCallLog(GaiaTestCase):
 
     def test_call_log_all_calls(self):
 
-        self.wait_for_element_displayed(*self._keyboard_container_locator)
+        self.wait_for_element_displayed(*self._recent_calls_toolbar_button_locator)
 
         self.marionette.find_element(*self._recent_calls_toolbar_button_locator).click()
 
         self.wait_for_element_displayed(*self._all_call_log_tab_locator)
 
-        _all_calls_tab = self.marionette.find_element(*self._all_call_log_tab_locator)
-        _all_calls_tab.click()
+        all_calls_tab = self.marionette.find_element(*self._all_call_log_tab_locator)
+        all_calls_tab.click()
 
         # Check that 'All calls' tab is selected
-        self.assertEqual(_all_calls_tab.get_attribute('class'), 'selected')
+        self.assertEqual(all_calls_tab.get_attribute('class'), 'selected')
 
         # Now check that at least one call is listed.
         all_calls = self.marionette.find_elements(*self._all_calls_list_item)
@@ -57,12 +54,12 @@ class TestCallLog(GaiaTestCase):
         self.assertGreater(len(all_calls), 0)
 
         # Check that the first one is displayed. this is only a smoke test after all
-        self.assertTrue(all_calls[0].is_displayed)
+        self.assertTrue(all_calls[0].is_displayed())
 
 
     def test_call_log_missed_calls(self):
 
-        self.wait_for_element_displayed(*self._keyboard_container_locator)
+        self.wait_for_element_displayed(*self._recent_calls_toolbar_button_locator)
 
         self.marionette.find_element(*self._recent_calls_toolbar_button_locator).click()
         self.wait_for_element_displayed(*self._missed_call_log_tab_locator)
@@ -79,7 +76,7 @@ class TestCallLog(GaiaTestCase):
         self.assertGreater(len(missed_calls), 0)
 
         # Check that the first one is displayed. this is only a smoke test after all
-        self.assertTrue(missed_calls[0].is_displayed)
+        self.assertTrue(missed_calls[0].is_displayed())
 
 
     def tearDown(self):

@@ -4,6 +4,7 @@
 
 from gaiatest import GaiaTestCase
 import time
+import unittest
 
 class TestSms(GaiaTestCase):
 
@@ -34,6 +35,7 @@ class TestSms(GaiaTestCase):
         self.assertTrue('gaiamobile' in url, 'wrong url: %s' % url)
 
 
+    @unittest.skipIf(GaiaTestCase.is_emulator is True, "Cannot run this test on emulator")
     def test_sms_send(self):
         '''
         This test depends upon an external/device emulator to return the text message
@@ -80,7 +82,7 @@ class TestSms(GaiaTestCase):
         # verify the received text message
         _received_message_text = self.marionette.find_element(*self._received_message_content_locator).text
 
-        self.assertIn("Reply\\n" + _text_message_content, _received_message_text)
+        self.assertIn("Reply\n" + _text_message_content, _received_message_text)
 
 
     def tearDown(self):
