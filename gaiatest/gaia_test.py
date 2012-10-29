@@ -79,12 +79,11 @@ class GaiaData(object):
         self.marionette.import_script(js)
 
     def insert_contact(self, contact):
-        json = contact.json()
-        print json
-        #output = self.marionette.execute_script("window.navigator.mozContacts.save(%s);" % json)
+        self.marionette.execute_script("GaiaDataLayer.insertContact(%s)" % contact.json())
 
-        output = self.marionette.execute_script("GaiaDataLayer.insertContact(%s)" % json)
-        print output
+    def remove_contact(self, contact):
+        self.marionette.execute_script("GaiaDataLayer.findAndRemoveContact(%s)" % contact.json())
+
 
 class GaiaTestCase(MarionetteTestCase):
 

@@ -5,29 +5,36 @@
 var GaiaDataLayer = {
 
     insertContact: function(cdata){
-        var contact = new mozContact();
-        //contact.init(cdata);
-        contact.init({
-            givenName: 'Tom',
-            familyName: 'Testing',
-            name: 'Tom Testing',
-            tel: '123-456-789'
-        });
-
+        contact = new mozContact();
+        contact.init(cdata);
         var request = window.navigator.mozContacts.save(contact);
 
-        console.log(request)
-        //window.navigator.mozContacts.save(testContact);
-
         request.onerror = function onerror() {
-            console.error('Error saving contact', request.error.name);
+            console.log('Error saving contact', request.error.name);
         }
 
-        request.onsuccess = function onerror() {
-            console.error('Success saving contact', request);
+        request.onsuccess = function onsuccess() {
+            console.log('Success saving contact', request);
         }
-
         return request;
+    },
 
+    findAndRemoveContact: function(cdata){
+        var options = {filterBy: ["givenName"],
+            filterOp: "contains",
+            filterValue: cdata['givenName']};
+
+        contact = window.navigator.mozContacts.find(options);
+
+        contact.onerror = function onerror() {
+            console.log('Could not find contact', contact.error.name);
+        }
+
+        contact.onsuccess = function onsuccess() {
+            console.log('Success finding contact', contact);
+            if(contact.result.length > 0){
+                return window.navigator.mozContacts.remove(contact.result[0]);
+            }
+        }
     }
 };
