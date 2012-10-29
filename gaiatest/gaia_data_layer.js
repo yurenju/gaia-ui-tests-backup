@@ -6,11 +6,28 @@ var GaiaDataLayer = {
 
     insertContact: function(cdata){
         var contact = new mozContact();
-        contact.init(cdata);
-        var req = window.navigator.mozContacts.save(contact);
+        //contact.init(cdata);
+        contact.init({
+            givenName: 'Tom',
+            familyName: 'Testing',
+            name: 'Tom Testing',
+            tel: '123-456-789'
+        });
 
+        var request = window.navigator.mozContacts.save(contact);
+
+        console.log(request)
         //window.navigator.mozContacts.save(testContact);
-        return req;
-    }
 
+        request.onerror = function onerror() {
+            console.error('Error saving contact', request.error.name);
+        }
+
+        request.onsuccess = function onerror() {
+            console.error('Success saving contact', request);
+        }
+
+        return request;
+
+    }
 };
