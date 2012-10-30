@@ -35,6 +35,7 @@ class TestSms(GaiaTestCase):
         self.assertTrue('gaiamobile' in url, 'wrong url: %s' % url)
 
 
+    @unittest.skip("Don't want to run this on CI")
     @unittest.skipIf(GaiaTestCase.is_emulator is True, "Cannot run this test on emulator")
     def test_sms_send(self):
         '''

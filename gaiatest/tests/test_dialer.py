@@ -5,6 +5,7 @@
 from gaiatest import GaiaTestCase
 import time
 
+
 class TestDialer(GaiaTestCase):
 
     _keyboard_container_locator = ('id', 'keyboard-container')
@@ -39,7 +40,6 @@ class TestDialer(GaiaTestCase):
         # Assert that the number was entered correctly.
         phone_view = self.marionette.find_element(*self._phone_number_view_locator)
 
-        # TODO text of this element does not work
         self.assertEqual(phone_view.get_attribute('value'), self.testvars['remote_phone_number'])
 
         # Now press call!

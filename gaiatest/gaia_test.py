@@ -89,11 +89,11 @@ class GaiaTestCase(MarionetteTestCase):
 
     def setUp(self):
         MarionetteTestCase.setUp(self)
+
         # the emulator can be really slow!
         self.marionette.set_script_timeout(60000)
         self.lockscreen = LockScreen(self.marionette)
         self.apps = GaiaApps(self.marionette)
-        self.data = GaiaData(self.marionette)
 
     @property
     def is_emulator(self):
@@ -169,5 +169,4 @@ class GaiaTestCase(MarionetteTestCase):
     def tearDown(self):
         self.lockscreen = None
         self.apps = None
-        self.data = None
         MarionetteTestCase.tearDown(self)

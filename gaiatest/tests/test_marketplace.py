@@ -4,6 +4,7 @@
 
 from gaiatest import GaiaTestCase
 import time
+import unittest
 
 class TestMarketplace(GaiaTestCase):
 
@@ -27,8 +28,8 @@ class TestMarketplace(GaiaTestCase):
         self.assertTrue('marketplace' in url, 'wrong url: %s' % url)
 
 
-    # TODO incomplete - this test requires Bug 802227
-    def blocked_load_marketplace(self):
+    @unittest.skip("Don't want to run this on CI")
+    def test_load_marketplace(self):
 
         # TODO replace this with an appropriate wait
         time.sleep(10)
@@ -52,7 +53,7 @@ class TestMarketplace(GaiaTestCase):
         #self.testvars['marketplace_username']
         #self.testvars['marketplace_password']
 
-        #TODO verify that user is logged in
+        #TODO Switch back to marketplace and verify that user is logged in
 
 
     def tearDown(self):

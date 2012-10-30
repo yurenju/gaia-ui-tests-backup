@@ -44,10 +44,9 @@ class TestCamera(GaiaTestCase):
         self.wait_for_element_displayed(*self._capture_button_locator)
         self.marionette.find_element(*self._switch_source_button_locator).click()
 
-       #self.wait_for_element_displayed(*self._video_timer_locator)
-
         self.marionette.find_element(*self._capture_button_locator).click()
 
+        self.assertTrue(self.marionette.find_element(*self._video_timer_locator).is_displayed())
         # Wait for 3 seconds of recording
         self.wait_for_condition(lambda m: m.find_element(*self._video_timer_locator).text == '00:03')
 
