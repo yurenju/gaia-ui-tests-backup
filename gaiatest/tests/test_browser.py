@@ -28,7 +28,7 @@ class TestBrowser(GaiaTestCase):
         url = self.marionette.get_url()
         self.assertTrue('browser' in url, 'wrong url: %s' % url)
 
-
+    @unittest.skip("Don't want to run this on Jenkins")
     def test_browser_basic(self):
 
         # This is returning True even though I cannot see it

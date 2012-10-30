@@ -75,6 +75,7 @@ class GaiaTestCase(MarionetteTestCase):
 
     def setUp(self):
         MarionetteTestCase.setUp(self)
+
         # the emulator can be really slow!
         self.marionette.set_script_timeout(60000)
         self.lockscreen = LockScreen(self.marionette)

@@ -3,7 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from gaiatest import GaiaTestCase
-import time
+import unittest
 
 class TestDialer(GaiaTestCase):
 
@@ -39,7 +39,6 @@ class TestDialer(GaiaTestCase):
         # Assert that the number was entered correctly.
         phone_view = self.marionette.find_element(*self._phone_number_view_locator)
 
-        # TODO text of this element does not work
         self.assertEqual(phone_view.get_attribute('value'), self.testvars['remote_phone_number'])
 
         # Now press call!

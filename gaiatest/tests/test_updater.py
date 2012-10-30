@@ -23,7 +23,8 @@ class TestUpdater(GaiaTestCase):
         url = self.marionette.get_url()
         self.assertTrue('settings' in url, 'wrong url: %s' % url)
 
-    # TODO finish this test!
+    # TODO finish this test as per https://github.com/zacc/gaia-ui-tests/issues/5
+    @unittest.skip("Don't want to run this on Jenkins")
     def incomplete_ota_update(self):
 
         # Device information
