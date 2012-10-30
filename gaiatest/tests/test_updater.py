@@ -3,7 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from gaiatest import GaiaTestCase
-
+import unittest
 
 class TestUpdater(GaiaTestCase):
 
@@ -24,8 +24,8 @@ class TestUpdater(GaiaTestCase):
         self.assertTrue('settings' in url, 'wrong url: %s' % url)
 
     # TODO finish this test as per https://github.com/zacc/gaia-ui-tests/issues/5
-    @unittest.skip("Don't want to run this on Jenkins")
-    def incomplete_ota_update(self):
+    @unittest.skip("Don't want to run this on CI")
+    def test_ota_update(self):
 
         # Device information
         self.marionette.find_element(*self._device_info_link).click()

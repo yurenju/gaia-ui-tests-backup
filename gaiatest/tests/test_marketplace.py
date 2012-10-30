@@ -4,6 +4,7 @@
 
 from gaiatest import GaiaTestCase
 import time
+import unittest
 
 class TestMarketplace(GaiaTestCase):
 
@@ -27,7 +28,7 @@ class TestMarketplace(GaiaTestCase):
         self.assertTrue('marketplace' in url, 'wrong url: %s' % url)
 
 
-    @unittest.skip("Don't want to run this on Jenkins")
+    @unittest.skip("Don't want to run this on CI")
     def test_load_marketplace(self):
 
         # TODO replace this with an appropriate wait
