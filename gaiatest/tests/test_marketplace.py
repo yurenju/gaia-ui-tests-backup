@@ -29,7 +29,7 @@ class TestMarketplace(GaiaTestCase):
         self.assertTrue('marketplace' in url, 'wrong url: %s' % url)
 
 
-    #@unittest.skip("Don't want to run this on CI")
+    @unittest.skip("Don't want to run this on CI")
     def test_load_marketplace(self):
 
         self.wait_for_element_displayed(*self._login_button)
