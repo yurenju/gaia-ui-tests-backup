@@ -26,6 +26,8 @@ var GaiaApps = {
                 if (typeof(app) === 'object') {
                     var result = {
                         name: app.manifest.name,
+                        version: app.manifest.version,
+                        description: app.manifest.description,
                         origin: app.origin,
                         entryPoint: entryPoint || null,
                         normalizedName: appName
@@ -85,7 +87,7 @@ var GaiaApps = {
 
                 function sendResponse(origin) {
                     let app = runningApps[origin];
-                    marionetteScriptFinished({frame: app.frame.id,
+                    marionetteScriptFinished({frame_id: app.frame.id,
                         src: app.frame.src,
                         name: app.name,
                         origin: origin});
@@ -120,6 +122,24 @@ var GaiaApps = {
             } else {
                 marionetteScriptFinished(false);
             }
+        });
+    },
+
+    get: function(name) {
+        GaiaApps.locateWithName(name, marionetteScriptFinished);
+    },
+
+    getCount: function() {
+        let appsReq = navigator.mozApps.mgmt.getAll();
+        appsReq.onsuccess = function() {
+            marionetteScriptFinished(appsReq.result.length);
+        };
+    },
+
+    uninstall: function(name) {
+        GaiaApps.locateWithName(name, function uninstall(app) {
+            app.uninstall();
+            marionetteScriptFinished(false)
         });
     }
 };

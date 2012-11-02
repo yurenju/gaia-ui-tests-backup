@@ -9,6 +9,7 @@ from marionette.errors import TimeoutException
 import os
 import time
 
+
 class LockScreen(object):
 
     def __init__(self, marionette):
@@ -42,34 +43,58 @@ waitFor(
 
 class GaiaApp(object):
 
-    def __init__(self, origin=None, name=None, frame_id=None, src=None):
-        self.frame_id = frame_id
-        self.src = src
-        self.name = name
-        self.origin = origin
+    def __init__(self, app=None, marionette=None):
+        self.marionette = marionette
+        if app is None:
+            return
+
+        for key in app:
+            setattr(self, key, app[key])
+
+    def uninstall(self):
+        self.marionette.switch_to_frame()
+        js = os.path.abspath(
+            os.path.join(__file__, os.path.pardir, "gaia_apps.js"))
+        self.marionette.import_script(js)
+        return self.marionette.execute_async_script("GaiaApps.uninstall('%s')" % self.name)
 
 
 class GaiaApps(object):
 
     def __init__(self, marionette):
         self.marionette = marionette
-        js = os.path.abspath(os.path.join(__file__, os.path.pardir, "gaia_apps.js"))
+        js = os.path.abspath(
+            os.path.join(__file__, os.path.pardir, "gaia_apps.js"))
         self.marionette.import_script(js)
 
+    def get(self, name):
+        self.marionette.switch_to_frame()
+        result = self.marionette.execute_async_script(
+            "GaiaApps.get('%s')" % name)
+        app = GaiaApp(app=result, marionette=self.marionette)
+        return app
+
     def launch(self, name):
-        result = self.marionette.execute_async_script("GaiaApps.launchWithName('%s')" % name)
-        app = GaiaApp(frame_id=result.get('frame'),
-                      src=result.get('src'),
-                      name=result.get('name'),
-                      origin=result.get('origin'))
+        result = self.marionette.execute_async_script(
+            "GaiaApps.launchWithName('%s')" % name)
+        app = GaiaApp(app=result, marionette=self.marionette)
         return app
 
     def kill(self, app):
         self.marionette.switch_to_frame()
-        js = os.path.abspath(os.path.join(__file__, os.path.pardir, "gaia_apps.js"))
+        js = os.path.abspath(
+            os.path.join(__file__, os.path.pardir, "gaia_apps.js"))
         self.marionette.import_script(js)
         self.marionette.execute_script("window.wrappedJSObject.WindowManager.kill('%s');"
-                                        % app.origin)
+                                       % app.origin)
+
+    def get_count(self):
+        self.marionette.switch_to_frame()
+        js = os.path.abspath(
+            os.path.join(__file__, os.path.pardir, "gaia_apps.js"))
+        self.marionette.import_script(js)
+        return self.marionette.execute_async_script("GaiaApps.getCount()")
+
 
 class GaiaTestCase(MarionetteTestCase):
 
@@ -95,7 +120,8 @@ class GaiaTestCase(MarionetteTestCase):
             except NoSuchElementException:
                 pass
         else:
-            raise TimeoutException('Element %s not found before timeout' % locator)
+            raise TimeoutException(
+                'Element %s not found before timeout' % locator)
 
     def wait_for_element_not_present(self, by, locator, timeout=10):
         timeout = float(timeout) + time.time()
@@ -107,7 +133,8 @@ class GaiaTestCase(MarionetteTestCase):
             except NoSuchElementException:
                 break
         else:
-            raise TimeoutException('Element %s still present after timeout' % locator)
+            raise TimeoutException(
+                'Element %s still present after timeout' % locator)
 
     def wait_for_element_displayed(self, by, locator, timeout=10):
         timeout = float(timeout) + time.time()
@@ -120,7 +147,8 @@ class GaiaTestCase(MarionetteTestCase):
             except NoSuchElementException:
                 pass
         else:
-            raise TimeoutException('Element %s not visible before timeout' % locator)
+            raise TimeoutException(
+                'Element %s not visible before timeout' % locator)
 
     def wait_for_element_not_displayed(self, by, locator, timeout=10):
         timeout = float(timeout) + time.time()
@@ -133,7 +161,8 @@ class GaiaTestCase(MarionetteTestCase):
             except NoSuchElementException:
                 break
         else:
-            raise TimeoutException('Element %s still visible after timeout' % locator)
+            raise TimeoutException(
+                'Element %s still visible after timeout' % locator)
 
     def wait_for_condition(self, method, timeout=10):
         """Calls the method provided with the driver as an argument until the \
