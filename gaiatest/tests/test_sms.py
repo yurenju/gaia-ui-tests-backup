@@ -40,8 +40,6 @@ class TestSms(GaiaTestCase):
         url = self.marionette.get_url()
         self.assertTrue('gaiamobile' in url, 'wrong url: %s' % url)
 
-    @unittest.skip("Don't want to run this on CI")
-    @unittest.skipIf(GaiaTestCase.is_emulator is True, "Cannot run this test on emulator")
     def test_sms_send(self):
         '''
         This test depends upon an external/device emulator to return the text message

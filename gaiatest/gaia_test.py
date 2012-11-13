@@ -113,10 +113,6 @@ class GaiaTestCase(MarionetteTestCase):
         self.apps = GaiaApps(self.marionette)
         self.data_layer = GaiaData(self.marionette)
 
-    @property
-    def is_emulator(self):
-        return self.marionette.emulator is not None
-
     def wait_for_element_present(self, by, locator, timeout=10):
         timeout = float(timeout) + time.time()
 
