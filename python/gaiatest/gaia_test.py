@@ -21,6 +21,8 @@ let setlock = window.wrappedJSObject.SettingsListener.getSettingsLock();
 let obj = {'screen.timeout': 0};
 setlock.set(obj);
 
+window.wrappedJSObject.ScreenManager.turnScreenOn();
+
 waitFor(
     function() {
         window.wrappedJSObject.LockScreen.unlock();
