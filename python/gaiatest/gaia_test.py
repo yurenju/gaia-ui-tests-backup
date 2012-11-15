@@ -88,7 +88,7 @@ class GaiaData(object):
 
     def __init__(self, marionette):
         self.marionette = marionette
-        js = os.path.abspath(os.path.join(__file__, os.path.pardir, "gaia_data_layer.js"))
+        js = os.path.abspath(os.path.join(__file__, os.path.pardir, 'atoms', "gaia_data_layer.js"))
         self.marionette.import_script(js)
 
     def insert_contact(self, contact):
