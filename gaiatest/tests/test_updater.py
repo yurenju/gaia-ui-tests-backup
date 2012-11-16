@@ -25,7 +25,6 @@ class TestUpdater(GaiaTestCase):
         self.assertTrue('settings' in url, 'wrong url: %s' % url)
 
     # TODO finish this test as per https://github.com/zacc/gaia-ui-tests/issues/5
-    @unittest.skip("Don't want to run this on CI")
     def test_ota_update(self):
 
         # Device information
