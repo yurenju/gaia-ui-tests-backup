@@ -14,33 +14,14 @@ class LockScreen(object):
 
     def __init__(self, marionette):
         self.marionette = marionette
+        js = os.path.abspath(os.path.join(__file__, os.path.pardir, 'atoms', "gaia_lock_screen.js"))
+        self.marionette.import_script(js)
+
+    def lock(self):
+        return self.marionette.execute_async_script("GaiaLockScreen.lock()")
 
     def unlock(self):
-        success = self.marionette.execute_async_script("""
-let setlock = window.wrappedJSObject.SettingsListener.getSettingsLock();
-let obj = {'screen.timeout': 0};
-setlock.set(obj);
-
-window.wrappedJSObject.ScreenManager.turnScreenOn();
-
-waitFor(
-    function() {
-        window.wrappedJSObject.LockScreen.unlock();
-        waitFor(
-            function() {
-                finish(window.wrappedJSObject.LockScreen.locked);
-            },
-            function() {
-                return !window.wrappedJSObject.LockScreen.locked;
-            }
-        );
-    },
-    function() {
-        return !!window.wrappedJSObject.LockScreen;
-    }
-);
-""")
-        return success
+        return self.marionette.execute_async_script("GaiaLockScreen.unlock()")
 
 
 class GaiaApp(object):
