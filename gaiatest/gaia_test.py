@@ -167,7 +167,8 @@ class GaiaTestCase(MarionetteTestCase):
             raise TimeoutException(
                 'Element %s still visible after timeout' % locator)
 
-    def wait_for_condition(self, method, timeout=10):
+    def wait_for_condition(self, method, timeout=10,
+                           message="Condition timed out"):
         """Calls the method provided with the driver as an argument until the \
         return value is not False."""
         end_time = time.time() + timeout
