@@ -48,13 +48,6 @@ class TestContacts(GaiaTestCase):
 
         # launch the Contacts app
         self.app = self.apps.launch('Contacts')
-        self.assertTrue(self.app.frame_id is not None)
-
-        # switch into the Contact's frame
-        self.marionette.switch_to_frame(self.app.frame_id)
-        url = self.marionette.get_url()
-        self.assertTrue('communications' in url, 'wrong url: %s' % url)
-
         self.wait_for_element_not_displayed(*self._loading_overlay)
 
 
