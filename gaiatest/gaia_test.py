@@ -67,6 +67,9 @@ class GaiaApps(object):
                       origin=result.get('origin'))
         return app
 
+    def uninstall(self, name):
+        self.marionette.execute_async_script("GaiaApps.uninstallWithName('%s')" % name)
+
     def kill(self, app):
         self.marionette.switch_to_frame()
         js = os.path.abspath(os.path.join(__file__, os.path.pardir, 'atoms', "gaia_apps.js"))
