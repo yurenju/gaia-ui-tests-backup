@@ -17,9 +17,11 @@ class LockScreen(object):
         js = os.path.abspath(os.path.join(__file__, os.path.pardir, 'atoms', "gaia_lock_screen.js"))
         self.marionette.import_script(js)
 
+    def lock(self):
+        return self.marionette.execute_async_script("GaiaLockScreen.lock()")
+
     def unlock(self):
-        success = self.marionette.execute_async_script("GaiaLockScreen.unlock()")
-        return success
+        return self.marionette.execute_async_script("GaiaLockScreen.unlock()")
 
 
 class GaiaApp(object):
