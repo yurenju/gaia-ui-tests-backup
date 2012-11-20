@@ -55,6 +55,7 @@ class TestContacts(GaiaTestCase):
         # https://moztrap.mozilla.org/manage/case/1309/
         #click Create new contact
 
+        self.wait_for_element_displayed(*self._add_new_contact_button_locator)
         self.marionette.find_element(
             *self._add_new_contact_button_locator).click()
         self.wait_for_element_displayed(*self._given_name_field_locator)
