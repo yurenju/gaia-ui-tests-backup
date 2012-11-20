@@ -22,14 +22,11 @@ class TestCalculator(GaiaTestCase):
 
         # launch the Calculator app
         self.app = self.apps.launch('Calculator')
-        self.assertTrue(self.app.frame_id is not None)
-
-        # switch into the Calculator's frame
-        self.marionette.switch_to_frame(self.app.frame_id)
-        url = self.marionette.get_url()
-        self.assertTrue('calculator' in url, 'wrong url: %s' % url)
 
     def test_calculator_basic(self):
+
+        # wait for the elements to show up
+        self.wait_for_element_displayed(*self._clear_button_locator)
 
         # clear the calculator's display
         self.marionette.find_element(*self._clear_button_locator).click()

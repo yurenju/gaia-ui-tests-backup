@@ -22,12 +22,6 @@ class TestMusic(GaiaTestCase):
 
       # launch the Music application
       self.app = self.apps.launch("music")
-      self.assertTrue(self.app.frame_id is not None)
-
-      # switch into the Music frame
-      self.marionette.switch_to_frame(self.app.frame_id)
-      url = self.marionette.get_url()
-      self.assertTrue('music' in url, 'wrong url: %s' % url)
 
   def test_select_album_play(self):
 

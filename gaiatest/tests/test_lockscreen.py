@@ -59,5 +59,4 @@ class TestLockScreen(GaiaTestCase):
 
     def tearDown(self):
 
-        #self.apps.kill_all()
         GaiaTestCase.tearDown(self)

@@ -28,12 +28,6 @@ class TestDialer(GaiaTestCase):
 
         # launch the app
         self.app = self.apps.launch('Phone')
-        self.assertTrue(self.app.frame_id is not None)
-
-        # switch into the app's frame
-        self.marionette.switch_to_frame(self.app.frame_id)
-        url = self.marionette.get_url()
-        self.assertTrue('dialer' in url, 'wrong url: %s' % url)
 
     def test_dialer_make_call(self):
 

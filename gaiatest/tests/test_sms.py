@@ -33,12 +33,6 @@ class TestSms(GaiaTestCase):
 
         # launch the app
         self.app = self.apps.launch('Messages')
-        self.assertTrue(self.app.frame_id is not None)
-
-        # switch into the frame
-        self.marionette.switch_to_frame(self.app.frame_id)
-        url = self.marionette.get_url()
-        self.assertTrue('gaiamobile' in url, 'wrong url: %s' % url)
 
     def test_sms_send(self):
         '''
