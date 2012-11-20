@@ -102,6 +102,18 @@ class GaiaData(object):
     def set_volume(self, volume):
         self.marionette.execute_script("GaiaDataLayer.setVolume(%s)" % volume)
 
+    def enable_wifi(self):
+        self.marionette.execute_script("return GaiaDataLayer.enableWifi()")
+
+    def disable_wifi(self):
+        self.marionette.execute_script("return GaiaDataLayer.disableWifi()")
+
+    def connect_to_wifi(self, ssid):
+        self.marionette.execute_script("return GaiaDataLayer.connectToWiFI('%s')" % ssid)
+
+    def forget_wifi(self, ssid):
+        self.marionette.execute_script("return GaiaDataLayer.forgetWiFI('%s')" % ssid)
+
 class GaiaTestCase(MarionetteTestCase):
 
     def setUp(self):
