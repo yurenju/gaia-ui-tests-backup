@@ -7,21 +7,28 @@ from marionette.keys import Keys
 
 
 APP_NAME = 'Lanyrd Mobile'
+APP_DEVELOPER = 'Lanyrd'
 
 
 class TestSearchMarketplaceAndInstallApp(GaiaTestCase):
 
+    # Marketplace search on home page
     _search_button = ('css selector', '.header-button.icon.search.right')
     _search = ('id', 'search-q')
 
+    # Marketplace search results area and a specific result item
     _search_results_area = ('id', 'search-results')
     _search_result = ('css selector', '#search-results li.item')
 
+    # Marketplace result app name, author, and install button
     _app_name_locator = ('xpath', '//h3')
     _author_locator = ('css selector', '.author.lineclamp.vital')
     _install_button = ('css selector', '.button.product.install')
 
+    # System app confirmation button to confirm installing an app
     _yes_button_locator = ('id', 'app-install-install-button')
+
+    # Label identifier for all homescreen apps
     _icons_locator = ('css selector', '.labelWrapper')
 
     def setUp(self):
@@ -57,7 +64,8 @@ class TestSearchMarketplaceAndInstallApp(GaiaTestCase):
         app_name = results[0].find_element(*self._app_name_locator)
         author = results[0].find_element(*self._author_locator)
         self.assertEquals(app_name.text, APP_NAME, 'First app has wrong name')
-        self.assertEquals(author.text, 'Lanyrd', 'First app wrong developer')
+        self.assertEquals(author.text, APP_DEVELOPER,
+            'First app wrong developer')
 
         # Find and click the install button to the install the web app
         install_button = results[0].find_element(*self._install_button)
@@ -74,7 +82,7 @@ class TestSearchMarketplaceAndInstallApp(GaiaTestCase):
         # Wait for app install to complete in the homescreen
         def wait_for_install_to_complete(marionette):
             labels = marionette.find_elements(*self._icons_locator)      
-            matches = [lb for lb in labels if lb.text == 'Lanyrd Mobil']
+            matches = [lb for lb in labels if lb.text == APP_NAME[:12]]
             return len(matches) == 1
         
         self.wait_for_condition(wait_for_install_to_complete)
