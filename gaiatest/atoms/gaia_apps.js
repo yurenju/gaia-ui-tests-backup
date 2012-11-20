@@ -87,6 +87,19 @@ var GaiaApps = {
   killAll: function() {
     let originsToClose = [];
     let that = this;
+
+    let runningApps = window.wrappedJSObject.WindowManager.getRunningApps();
+    for (let origin in runningApps) {
+      if (origin.indexOf('homescreen') == -1) {
+        originsToClose.push(origin);
+     }
+    }
+
+    if (!originsToClose.length) {
+      marionetteScriptFinished(true);
+      return;
+    }
+
     window.addEventListener('appterminated', function gt_onAppTerminated(evt) {
       let index = originsToClose.indexOf(evt.detail.origin);
       if (index > -1) {
@@ -103,13 +116,10 @@ var GaiaApps = {
         );
       }
     });
-    let runningApps = window.wrappedJSObject.WindowManager.getRunningApps();
-    for (let origin in runningApps) {
-      if (origin.indexOf('homescreen') == -1) {
-        originsToClose.push(origin);
-        window.wrappedJSObject.WindowManager.kill(origin);
-      }
-    }
+
+    originsToClose.slice(0).forEach(function(origin) {
+      window.wrappedJSObject.WindowManager.kill(origin);
+    });
   },
 
   /**

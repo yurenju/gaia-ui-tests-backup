@@ -6,23 +6,39 @@ from gaiatest import GaiaTestCase
 
 
 class TestKillAll(GaiaTestCase):
+
     def test_kill_all(self):
-        # unlock the lockscreen if it's locked
-        self.assertTrue(self.lockscreen.unlock())
+        self.lockscreen.unlock()
 
-        # launch the Calculator app
-        app = self.apps.launch('Calculator')
-        self.assertTrue(app.frame_id is not None)
+        for app in ['Calculator', 'Clock']:
+            self.apps.launch(app)
 
-        # launch the Clock app
-        app = self.apps.launch('Clock')
-        self.assertTrue(app.frame_id is not None)
+        self.apps.kill_all()
+        self.check_no_apps_running()
 
-        # kill all the apps
+    def test_kill_all_with_no_apps_running(self):
+        self.lockscreen.unlock()
+        self.check_no_apps_running()
+        self.apps.kill_all()
+        self.check_no_apps_running()
+
+    def test_kill_all_twice(self):
+        self.lockscreen.unlock()
+
+        apps = ['Calculator', 'Clock']
+        for app in apps:
+            self.apps.launch(app)
+
+        self.apps.kill_all()
+        self.check_no_apps_running()
+
+        for app in apps:
+            self.apps.launch(app)
+
         self.apps.kill_all()
 
-        # verify no apps are active
+    def check_no_apps_running(self):
         runningApps = self.apps.runningApps()
         for origin in runningApps.keys():
             if 'homescreen' not in origin:
-                self.assertTrue(False, "%s still running" % origin)
+                self.fail('%s still running' % origin)
