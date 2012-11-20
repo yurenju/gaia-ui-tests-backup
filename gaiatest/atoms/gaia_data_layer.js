@@ -50,7 +50,7 @@ var GaiaDataLayer = {
     enableWiFi: function(){
         lock = window.navigator.mozSettings.createLock();
         wifiOn = lock.set({"wifi.enabled": true});
-
+        lock.clear();
         wifiOn.onsuccess = function(){
             console.log('WiFi ON');
             return true;
