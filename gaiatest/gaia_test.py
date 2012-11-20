@@ -92,7 +92,7 @@ class GaiaData(object):
         self.marionette = marionette
         js = os.path.abspath(os.path.join(__file__, os.path.pardir, 'atoms', "gaia_data_layer.js"))
         self.marionette.import_script(js)
-        self.marionette.set_search_timeout(30000)
+        self.marionette.set_search_timeout(10000)
 
     def insert_contact(self, contact):
         self.marionette.execute_script("GaiaDataLayer.insertContact(%s)" % contact.json())
