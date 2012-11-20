@@ -25,6 +25,9 @@ class TestCalculator(GaiaTestCase):
 
     def test_calculator_basic(self):
 
+        # wait for the elements to show up
+        self.wait_for_element_displayed(*self._clear_button_locator)
+
         # clear the calculator's display
         self.marionette.find_element(*self._clear_button_locator).click()
 
