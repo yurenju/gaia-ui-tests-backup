@@ -22,12 +22,6 @@ class TestCalculator(GaiaTestCase):
 
         # launch the Calculator app
         self.app = self.apps.launch('Calculator')
-        self.assertTrue(self.app.frame_id is not None)
-
-        # switch into the Calculator's frame
-        self.marionette.switch_to_frame(self.app.frame_id)
-        url = self.marionette.get_url()
-        self.assertTrue('calculator' in url, 'wrong url: %s' % url)
 
     def test_calculator_basic(self):
 

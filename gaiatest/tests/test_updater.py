@@ -18,11 +18,6 @@ class TestUpdater(GaiaTestCase):
 
         # launch the Settings app
         self.app = self.apps.launch('Settings')
-        self.assertTrue(self.app.frame_id is not None)
-
-        self.marionette.switch_to_frame(self.app.frame_id)
-        url = self.marionette.get_url()
-        self.assertTrue('settings' in url, 'wrong url: %s' % url)
 
     # TODO finish this test as per https://github.com/zacc/gaia-ui-tests/issues/5
     def test_ota_update(self):
