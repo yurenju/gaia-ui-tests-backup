@@ -32,9 +32,7 @@ class TestMusic(GaiaTestCase):
       self.marionette.find_element(*self._tab_albums_locator).click()
 
       # check that an album is displayed
-      self.wait_for_element_displayed(*self._album_tile_locator)
-      self.assertTrue(
-          self.marionette.find_element(*self._album_tile_locator).is_displayed())
+      self.wait_for_element_present(*self._album_tile_locator)
 
       # select an album
       self.marionette.find_element(*self._album_tile_locator).click()
