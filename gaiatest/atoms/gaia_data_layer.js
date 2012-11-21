@@ -39,11 +39,93 @@ var GaiaDataLayer = {
     },
 
     setVolume: function(vdata){
-        lock = window.navigator.mozSettings.createLock()
+        lock = window.navigator.mozSettings.createLock();
         volume = lock.set({"audio.volume.master":vdata});
-        lock.clear()
+        lock.clear();
         volume.onerror = function onerror(){
             console.log('volume set failed', volume.error.name);
         }
+    },
+
+    enableWiFi: function(){
+        lock = window.navigator.mozSettings.createLock();
+        wifiOn = lock.set({"wifi.enabled": true});
+        wifiOn.onsuccess = function(){
+            console.log('WiFi ON');
+            return true;
+        }
+
+        wifiOn.onerror = function(){
+            console.log('WiFi On failed', wifiOn.error.name);
+            return false;
+        }
+    },
+
+    disableWiFi: function(){
+        lock = window.navigator.mozSettings.createLock();
+        wifiOn = lock.set({"wifi.enabled": false});
+        wifiOn.onsuccess = function(){
+            console.log('WiFi OFF');
+            return true;
+        }
+
+        wifiOn.onerror = function(){
+            console.log('WiFi OFF failed', wifiOn.error.name);
+            return false;
+        }
+    },
+
+    connectToWiFi: function(ssid){
+        var manager = window.navigator.mozWifiManager;
+        var req = manager.getNetworks();
+
+        req.onsuccess = function onScanSuccess() {
+            var allNetworks = req.result;
+            var preferredNetwork = allNetworks[ssid];
+
+            connect = manager.associate(preferredNetwork);
+            connect.onerror = function (){
+                console.log('Connection to '+ ssid + ' failed', connect.error.name);
+                return false;
+            }
+
+            connect.onsuccess = function() {
+                console.log('Connected to ' + ssid);
+                return true;
+            }
+        }
+
+        req.onerror = function(){
+            console.log('Could not get the available network list', req.error.name);
+            return false;
+        }
+
+    },
+
+    forgetWiFi: function(ssid){
+        var manager = window.navigator.mozWifiManager;
+        var req = manager.getKnownNetworks();
+
+        req.onsuccess = function () {
+            var allNetworks = req.result;
+            var preferredNetwork = allNetworks[ssid];
+
+            forget = manager.forget(preferredNetwork);
+            forget.onerror = function (){
+                console.log('Forgetting network' + ssid + ' failed', forget.error.name);
+                return false;
+            }
+
+            forget.onsuccess = function() {
+                console.log('Forgotten network ' + ssid);
+                return true;
+            }
+        }
+
+        req.onerror = function(){
+            console.log('Could not get the known network list', req.error.name);
+            return false;
+        }
+
     }
 };
