@@ -8,6 +8,7 @@ import time
 class TestMusic(GaiaTestCase):
 
   _album_tile_locator = ('xpath', ".//*[@id='views-list']/li/a")
+  _album_title_locator = ('class name', "list-main-title")
   _player_seek_elapsed_locator = ('id', 'player-seek-elapsed')
   _player_controls_play_locator = ('id', 'player-controls-play')
   _tab_albums_locator = ('id', 'tabs-albums')
@@ -31,8 +32,12 @@ class TestMusic(GaiaTestCase):
       # switch to albums view
       self.marionette.find_element(*self._tab_albums_locator).click()
 
-      # check that an album is displayed
+      # check that an album is present  
+      #TODO: replace with a display check when Bug 814037 is fixed
       self.wait_for_element_present(*self._album_tile_locator)
+
+      # check that an album title is present 
+      self.wait_for_element_present(*self._album_title_locator)
 
       # select an album
       self.marionette.find_element(*self._album_tile_locator).click()
