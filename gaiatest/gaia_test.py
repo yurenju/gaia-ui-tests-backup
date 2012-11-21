@@ -3,6 +3,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from marionette import MarionetteTestCase
+from marionette import Marionette
+from marionette import MarionetteTouchMixin
 from marionette.errors import NoSuchElementException
 from marionette.errors import ElementNotVisibleException
 from marionette.errors import TimeoutException
@@ -119,6 +121,8 @@ class GaiaTestCase(MarionetteTestCase):
 
     def setUp(self):
         MarionetteTestCase.setUp(self)
+        self.marionette.__class__ = type('Marionette', (Marionette, MarionetteTouchMixin), {})
+        self.marionette.setup_touch()
 
         # the emulator can be really slow!
         self.marionette.set_script_timeout(60000)
