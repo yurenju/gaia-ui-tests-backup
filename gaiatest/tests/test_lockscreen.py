@@ -16,7 +16,6 @@ class TestLockScreen(GaiaTestCase):
     _homescreen_frame_locator = ('css selector', 'iframe.homescreen')
     _homescreen_landing_locator = ('id', 'landing-page')
 
-
     def setUp(self):
         GaiaTestCase.setUp(self)
 
@@ -41,7 +40,6 @@ class TestLockScreen(GaiaTestCase):
         landing_element = self.marionette.find_element(*self._homescreen_landing_locator)
 
         self.assertTrue(landing_element.is_displayed(), "Landing element not displayed after unlocking")
-
 
     def _swipe_and_unlock(self):
 
