@@ -36,6 +36,8 @@ var GaiaLockScreen = {
         let obj = {'screen.timeout': 0};
         setlock.set(obj);
 
+        window.wrappedJSObject.ScreenManager.turnScreenOn();
+
         waitFor(
             function() {
                 window.wrappedJSObject.LockScreen.lock();
