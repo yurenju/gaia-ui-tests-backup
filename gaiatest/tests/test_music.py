@@ -39,6 +39,10 @@ class TestMusic(GaiaTestCase):
       # check that an album title is present 
       self.wait_for_element_present(*self._album_title_locator)
 
+      # check that albums (at least one) are available
+      albums = self.marionette.find_elements(*self._album_tile_locator)
+      self.assertGreater(len(albums), 0, 'no results found')
+
       # select an album
       self.marionette.find_element(*self._album_tile_locator).click()
 
