@@ -26,12 +26,6 @@ class TestCalendar(GaiaTestCase):
 
         # launch the Calendar app
         self.app = self.apps.launch('calendar')
-        self.assertTrue(self.app.frame_id is not None)
-
-        # switch into the Calendar's frame
-        self.marionette.switch_to_frame(self.app.frame_id)
-        url = self.marionette.get_url()
-        self.assertTrue('calendar' in url, 'wrong url: %s' % url)
 
     def test_check_today_date(self):
 
