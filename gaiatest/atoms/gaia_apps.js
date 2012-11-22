@@ -174,5 +174,16 @@ var GaiaApps = {
         marionetteScriptFinished(false);
       }
     });
+  },
+
+  /**
+   * Uninstalls the app with the speciifed name.
+   */
+  uninstallWithName: function(name) {
+    GaiaApps.locateWithName(name, function uninstall(app) {
+      app.uninstall();
+      marionetteScriptFinished(false);
+    });
   }
+
 };
